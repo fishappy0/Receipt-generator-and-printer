@@ -225,11 +225,19 @@ namespace DCVB_In_Hoa_Don
                 this.note = note_txtbox.Text.Trim();
                 this.date = date_lbl.Text.Trim();
 
-                string[] findList = { "{billedDate}", "{billedCustomer}", "{billedCustomerPhone}", "{billedCustomerAddress}", "{merchantName}", "{quantity}", "{totalPrice}", "{totalPriceText}", "{noteText}" };
-                string[] replaceList = { this.date, this.customerName, this.customerPhone, this.customerAddress, this.sellerName, this.totalQuantity, this.totalPrice, this.totalPriceText, this.note };
+                Dictionary<String, String> find_and_replace_dict = new Dictionary<String, String>();
+                find_and_replace_dict.Add("{billedDate}", this.date);
+                find_and_replace_dict.Add("{billedCustomer}", this.customerName);
+                find_and_replace_dict.Add("{billedCustomerPhone}", this.customerPhone);
+                find_and_replace_dict.Add("{billedCustomerAddress}", this.customerAddress);
+                find_and_replace_dict.Add("{merchantName}", this.sellerName);
+                find_and_replace_dict.Add("{quantity}", this.totalQuantity);
+                find_and_replace_dict.Add("{totalPrice}", this.totalPrice);
+                find_and_replace_dict.Add("{totalPriceText}", this.totalPriceText);
+                find_and_replace_dict.Add("{noteText}", this.note);
 
                 wordProc.setWordDocWithAddress(AppDomain.CurrentDomain.BaseDirectory + @"\documentTemplates\Hoa-don-Mau.docx");
-                wordProc.replaceWordsWithArr(findList, replaceList);
+                wordProc.replaceWords(find_and_replace_dict);
                 wordProc.customFillingTable(item_datagridview);
             }
             catch (Exception ex)

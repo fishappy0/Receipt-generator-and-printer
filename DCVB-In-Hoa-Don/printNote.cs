@@ -38,16 +38,19 @@ namespace DCVB_In_Hoa_Don
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 this.note = note_txtbox.Text;
-                string[] findList = {"{billedDate}", "{note}"};
-                string[] replaceList = { this.date, this.note };
+                Dictionary<String, String> find_and_replace_list = new Dictionary<String, String>();
+                find_and_replace_list.Add("{billedDate}", this.date);
+                find_and_replace_list.Add("{note}", this.note);
 
                 wordProcessor wordProc = new wordProcessor();
                 wordProc.setWordDocWithAddress(AppDomain.CurrentDomain.BaseDirectory + @"\documentTemplates\Ghi-chu-Mau.docx");
-                wordProc.replaceWordsWithArr(findList, replaceList);
+                wordProc.replaceWords(find_and_replace_list);
                 wordProc.saveInstance(saveFileDialog1.FileName);
                 wordProc.printWithDoc();
-            } else{
-              MessageBox.Show("Đã huỷ thao tác lưu và ngừng in.");
+            }
+            else
+            {
+                MessageBox.Show("Đã huỷ thao tác lưu và ngừng in.");
             }
         }
 
@@ -56,7 +59,7 @@ namespace DCVB_In_Hoa_Don
             dialogue_openfiledialog.Filter = "PDF documents (*.pdf)|*.pdf|Text document (*.txt)|*.txt";
             dialogue_openfiledialog.FilterIndex = 0;
             dialogue_openfiledialog.InitialDirectory = @"%USERPROFILE%\Dekstop";
-            if(dialogue_openfiledialog.ShowDialog() == DialogResult.OK)
+            if (dialogue_openfiledialog.ShowDialog() == DialogResult.OK)
             {
                 file_name_lbl.Text = System.IO.Path.GetFileName(dialogue_openfiledialog.FileName);
                 string[] fileType = dialogue_openfiledialog.FileName.Split('.');
@@ -76,15 +79,17 @@ namespace DCVB_In_Hoa_Don
                         PdfDocument pdfDoc = PdfDocument.Open(dialogue_openfiledialog.FileName);
                         foreach (Page page in pdfDoc.GetPages())
                         {
-                            IEnumerable<Word> words= page.GetWords();
-                            foreach(Word word in words)
+                            IEnumerable<Word> words = page.GetWords();
+                            foreach (Word word in words)
                             {
                                 textBoxString += word.ToString() + " ";
                             }
                         }
                         note_txtbox.Text = textBoxString;
                         break;
-                    
+                    default:
+                        throw new Exception();
+
                 }
             }
         }
