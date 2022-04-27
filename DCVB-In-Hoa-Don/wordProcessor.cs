@@ -133,24 +133,15 @@ namespace DCVB_In_Hoa_Don
             this.printFromAddress(AppDomain.CurrentDomain.BaseDirectory + @"\documentTemplates\InWordK80.docx");
         }
 
-        public void replaceWordsWithArr(string[] findList, string[] replaceList)
+        public void replaceWords(Dictionary<String, String> find_and_replace_dict)
         {
             try
             {
-                if (findList.Length == replaceList.Length)
+                foreach (var entry in find_and_replace_dict)
                 {
-                    int iter = 0;
-                    foreach (string str in findList)
-                    {
-                        //Console.WriteLine("item[" + iter+"]: "+ replaceList[iter]);
-                        findAndReplaceWith(wordApp, str, replaceList[iter]);
-                        iter++;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("[Function: replaceCharactersWithArr] list length mismatch: " +
-                                      "findList length is " + findList.Length + ", and replaceList length is " + replaceList.Length);
+                    String find = entry.Key;
+                    String replace = entry.Value;
+                    findAndReplaceWith(wordApp, find, replace);
                 }
             }
             catch (Exception error)
